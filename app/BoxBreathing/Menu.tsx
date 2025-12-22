@@ -2,6 +2,8 @@ import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import "../../global.css";
 
+//This page is the Menu for Box Breathing, choosing the duration of inhales/exhales/holds
+
 export default function BoxBreathingMenu() {
   return (
     <View className="flex-1 items-center justify-center bg-white">

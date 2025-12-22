@@ -8,7 +8,7 @@ export default function Index() {
       <Text className="text-4xl font-bold text-blue-500">
         Welcome to Nativewind!
       </Text>
-      <Link href="../BoxBreathing/BoxBreathingMenu"> Box Breathing</Link>
+      <Link href="../BoxBreathing/Menu"> Box Breathing</Link>
       {/* <Link href="./boxBreathingMenu">4 - 7 - 8 Breathing</Link> */}
     </View>
   );
