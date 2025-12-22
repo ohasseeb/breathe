@@ -52,21 +52,26 @@ Join our community of developers creating universal apps.
 ## NativeWind (Tailwind for React Native) — packages & setup I used
 
 Packages installed
+
 ```bash
 npm install nativewind tailwindcss postcss autoprefixer
 ```
 
 Babel config
+
 - Add the NativeWind babel plugin to babel.config.js:
+
 ```js
 module.exports = {
-  presets: ['babel-preset-expo'],
-  plugins: ['nativewind/babel'],
+  presets: ["babel-preset-expo"],
+  plugins: ["nativewind/babel"],
 };
 ```
 
 Tailwind config
+
 - Create tailwind.config.js at the project root and include the NativeWind preset and content globs. Example (this repo's config):
+
 ```js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -83,26 +88,34 @@ module.exports = {
 ```
 
 Global CSS
+
 - Create app/global.css and include the Tailwind directives:
+
 ```css
 /* app/global.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
+
 - Import that file from your entry (you already import it in app/index.tsx):
+
 ```ts
 import "../global.css";
 ```
 
 Building / CLI notes
+
 - If you run the Tailwind CLI directly, point it at the actual file path (app/global.css). For example:
+
 ```bash
 npx tailwindcss -i ./app/global.css -o app/output.css --watch
 ```
+
 - The warning "No utility classes were detected..." usually means the `content` globs don't match or the CLI is pointed at the wrong working dir. Ensure tailwind.config.js is at the repo root and run the CLI from the project root (or pass --config).
 
 Final checks
+
 - Restart the Metro bundler / dev server after making config changes.
 - Confirm files with className strings exist under the paths listed in `content` (e.g. app/index.tsx).
 
