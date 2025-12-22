@@ -119,6 +119,10 @@ Final checks
 - Restart the Metro bundler / dev server after making config changes.
 - Confirm files with className strings exist under the paths listed in `content` (e.g. app/index.tsx).
 
+## Expo Routing
+
+https://docs.expo.dev/router/basics/navigation/#understanding-native-navigation
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
