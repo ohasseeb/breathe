@@ -8,7 +8,7 @@ export default function BoxBreathingMenu() {
   function handleDurationSelect(duration: number | "custom") {
     const durationNavigationObj = {
       pathname: "./Duration",
-      params: { duration: duration === "custom" ? undefined : duration },
+      params: { duration: duration === "custom" ? "custom" : duration },
     } as any; // Satisfy the typed Link Href
 
     return durationNavigationObj;
