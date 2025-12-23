@@ -1,29 +1,36 @@
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 // Takes in Seconds as Props , if no prop then custom is selected
 
-type DurationProps = {
-  seconds?: number;
-};
+export default function Duration() {
+  const { duration } = useLocalSearchParams();
 
-export default function Duration({ seconds }: DurationProps) {
+  console.log("Duration Params:", duration);
   return (
     <View>
       <View className="items-center justify-center">
         <Text className="text-5xl "> Box Breathing</Text>
 
         <Text className=" text-5xl">
-          {seconds ? seconds : "Custom"} Duration{" "}
+          {duration ? duration : "Custom"} Second Holds{" "}
         </Text>
       </View>
 
-      <Text> Box Seconds {seconds ? seconds : ""} </Text>
-      <Text> Durations {seconds ? seconds : ""} </Text>
+      <View className="items-center justify-center mt-20">
+        <Text className="text-5xl">
+          {" "}
+          Box Seconds {duration ? duration : ""}{" "}
+        </Text>
+        <Text className="text-5xl"> Durations {duration ? duration : ""} </Text>
+      </View>
       {/*  For Duration Add a picker for seconds / minutes */}
 
       <View className="items-center justify-center">
-        <Link href="./Action"> Start</Link>
+        <Link className="text-5xl" href="./Action">
+          {" "}
+          Start
+        </Link>
       </View>
     </View>
   );
