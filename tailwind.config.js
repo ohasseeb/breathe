@@ -39,6 +39,7 @@ module.exports = {
         "header-secondary": "2.25rem", // 36px
         "subheader-primary": "1.875rem", // 30px
         "subheader-secondary": "1.5rem", // 24px
+        "form-value": "1.25rem", // 20px
       },
     },
   },

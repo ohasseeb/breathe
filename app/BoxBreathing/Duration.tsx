@@ -5,6 +5,7 @@ import { Text, TextInput, View } from "react-native";
 
 export default function Duration() {
   const { duration } = useLocalSearchParams();
+  const isCustom = duration === "Custom";
 
   console.log("Duration Params:", duration);
   return (
@@ -18,29 +19,28 @@ export default function Duration() {
       </View>
 
       <View className="flex flex-row items-center justify-center mt-20">
-        <Text className="text-5xl">Box Seconds </Text>
-        <Text> {duration !== "custom" ? duration : ""}</Text>
-        {duration === "custom" && (
+        <Text className="text-subheader-secondary">Box Seconds </Text>
+        <Text> {!isCustom ? duration : ""}</Text>
+        {isCustom && (
           <TextInput
-            className="border border-gray-300 rounded p-2"
+            className="border border-gray-300 rounded p-2 text-form-value w-20"
             placeholder="Enter custom duration"
           />
         )}
       </View>
 
       <View className="flex flex-row items-center justify-center mt-10">
-        <Text className="text-5xl"> Duration</Text>
-        <Text> {duration !== "custom" ? duration : ""}</Text>
+        <Text className="text-subheader-secondary"> Duration</Text>
+        <Text> {!isCustom ? duration : ""}</Text>
         <TextInput
-          className="border border-gray-300 rounded p-2"
+          className="border border-gray-300 rounded p-2 text-form-value w-20"
           placeholder="Enter custom duration"
         />
       </View>
       {/*  For Duration Add a picker for seconds / minutes */}
 
-      <View className="items-center justify-center">
-        <Link className="text-5xl" href="./Action">
-          {" "}
+      <View className="items-center justify-center mt-20">
+        <Link className="text-subheader-primary" href="./Action">
           Start
         </Link>
       </View>
