@@ -87,7 +87,7 @@ module.exports = {
 };
 ```
 
-Global CSS
+## Global CSS
 
 - Create app/global.css and include the Tailwind directives:
 
@@ -112,6 +112,10 @@ Building / CLI notes
 npx tailwindcss -i ./app/global.css -o app/output.css --watch
 ```
 
+## Included Libary Components:
+
+Picker Libary: https://github.com/react-native-picker/picker
+
 - The warning "No utility classes were detected..." usually means the `content` globs don't match or the CLI is pointed at the wrong working dir. Ensure tailwind.config.js is at the repo root and run the CLI from the project root (or pass --config).
 
 Final checks
@@ -129,10 +133,3 @@ To learn more about developing your project with Expo, look at the following res
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
