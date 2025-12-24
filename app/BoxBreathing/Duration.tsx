@@ -5,55 +5,86 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 // Takes in Seconds as Props , if no prop then custom is selected
 
 export default function Duration() {
-  const { duration } = useLocalSearchParams();
+  const { boxSeconds } = useLocalSearchParams();
 
   // CONSTANTS
-  const durationOptions = ["holds", "minutes"];
+  const durationOptions = ["Holds", "Minutes"];
   const HOLDS = 0;
   const MINUTES = 1;
-  const isCustom = duration === "Custom";
+  const isCustom = boxSeconds === "Custom";
 
   // STATES
-  const [durationType, setDurationType] = useState(durationOptions[MINUTES]);
+  const [durationType, setDurationType] = useState(durationOptions[HOLDS]);
+  const [customSeconds, onChangeCustomSeconds] = useState("");
+  const [customDuration, onChangeCustomDuration] = useState("");
   const [openPicker, setOpenPicker] = useState(false);
   const togglePicker = () => setOpenPicker((prev) => !prev);
 
   useEffect(() => {}, [openPicker]);
 
-  console.log("Duration Params:", duration);
+  function navigateToAction(
+    boxSeconds: number,
+    duration: number,
+    durationType: string
+  ) {
+    const actionNavigationObj = {
+      pathname: "./Action",
+      params: { boxSeconds, duration, durationType },
+    } as any; // Satisfy the typed Link Href)
+
+    return actionNavigationObj;
+  }
+
+  console.log("Box Seconds Params:", boxSeconds);
   return (
     <View>
+      {/* Text displaying the box breathing duration */}
       <View className="items-center justify-center">
         <Text className="text-5xl "> Box Breathing</Text>
 
         <Text className=" text-5xl">
-          {duration ? duration : "Custom"} Second Holds{" "}
+          {boxSeconds ? boxSeconds : "Custom"} Second Holds
         </Text>
       </View>
+
+      {/* Text displaying the box breathing duration in seconds */}
       <View className="flex flex-row items-center justify-center mt-20">
         <Text className="text-subheader-secondary">Box Seconds </Text>
-        <Text> {!isCustom ? duration : ""}</Text>
+        <Text className="text-subheader-secondary">
+          {!isCustom ? boxSeconds : " "}
+        </Text>
         {isCustom && (
           <TextInput
             className="border border-gray-300 rounded p-2 text-form-value w-20"
             placeholder="Enter custom duration"
+            onChangeText={onChangeCustomSeconds}
+            value={customSeconds}
           />
         )}
       </View>
+
+      {/* Text displaying the box breathing duration type */}
       <View className="flex flex-row items-center justify-center mt-10">
-        <Text className="text-subheader-secondary"> Duration</Text>
-        <Text> {!isCustom ? duration : ""}</Text>
-        <TextInput
-          className="border border-gray-300 rounded p-2 text-form-value w-20"
-          placeholder="Enter custom duration"
-        />
+        <Text className="text-subheader-secondary"> Duration: </Text>
+        <Text className="text-subheader-secondary">
+          {!isCustom ? boxSeconds : ""}
+        </Text>
+
+        {isCustom && (
+          <TextInput
+            className="border border-gray-300 rounded p-2 text-form-value w-20"
+            placeholder="Enter custom duration"
+            onChangeText={onChangeCustomDuration}
+            value={customDuration}
+          />
+        )}
         <TouchableOpacity onPress={togglePicker}>
-          <Text className="text-link-primary ml-2"> {durationType} </Text>
+          <Text className="text-subheader-secondary ml-2">{durationType}</Text>
         </TouchableOpacity>
       </View>
-      {/* For Duration Add a picker for seconds / minutes */}
 
       {openPicker && (
+        // Consider putting all of this in a Modal instead of a View
         <View>
           <Picker
             selectedValue={durationType}
@@ -73,8 +104,17 @@ export default function Duration() {
           </TouchableOpacity>
         </View>
       )}
+
+      {/* Text displaying the Start button to start navigation */}
       <View className="items-center justify-center mt-20">
-        <Link className="text-subheader-primary" href="./Action">
+        <Link
+          className="text-subheader-primary"
+          href={navigateToAction(
+            Number(boxSeconds) ? Number(boxSeconds) : Number(customSeconds),
+            customDuration ? Number(customDuration) : Number(boxSeconds),
+            durationType
+          )}
+        >
           Start
         </Link>
       </View>
