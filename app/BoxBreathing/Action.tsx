@@ -6,14 +6,18 @@ export default function Action() {
   const { boxSeconds, duration, durationType } = useLocalSearchParams();
   const [time, setTime] = useState(boxSeconds as unknown as number);
   const [globalDuration, setGlobalDuration] = useState(100);
+  const [breathState, setBreathState] = useState("in");
+  const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
+  const INHALE = 0;
+  const HOLD = 1;
+  const EXHALE = 2;
 
   useEffect(() => {}, [time, globalDuration]);
 
   // work in progress
-  const startTimer = (seconds: number) => {
+  const startTimer = (seconds: number, breathState: string) => {
     return new Promise<void>((resolve) => {
-      console.log("Starting timer for", seconds, "seconds");
       setTime(seconds);
       let localTime = seconds;
 
@@ -59,14 +63,27 @@ export default function Action() {
     // startBreathingExercise();
   }
 
-  const startBreathingExercise = async () => {
-    let boxSecondsNum = Number(boxSeconds);
+  const inhale = async () => {
+    setBreathState(breathStateOptions[INHALE]);
+    await startTimer(Number(boxSeconds), breathStateOptions[0]);
+  };
 
+  const exhale = async () => {
+    setBreathState(breathStateOptions[EXHALE]);
+    await startTimer(Number(boxSeconds), breathStateOptions[2]);
+  };
+
+  const hold = async () => {
+    setBreathState(breathStateOptions[HOLD]);
+    await startTimer(Number(boxSeconds), breathStateOptions[1]);
+  };
+
+  const startBreathingExercise = async () => {
     for (let i = 0; i < 2; i++) {
-      await startTimer(boxSecondsNum)
-        .then(async () => await startTimer(boxSecondsNum))
-        .then(async () => await startTimer(boxSecondsNum))
-        .then(async () => await startTimer(boxSecondsNum));
+      await inhale()
+        .then(async () => await hold())
+        .then(async () => await exhale())
+        .then(async () => await hold());
     }
   };
 
@@ -77,9 +94,11 @@ export default function Action() {
       <Text>Duration: {duration}</Text>
       <Text>Duration Type: {durationType}</Text>
       <View className="mt-10 mb-10 items-center justify-center">
+        <Text className="text-header-secondary">
+          Breath State: {breathState}
+        </Text>
         <Text className="text-header-primary">Time Left: {time} seconds</Text>
         <Text className="text-header-secondary">
-          {" "}
           Global Duration {globalDuration} seconds
         </Text>
       </View>
