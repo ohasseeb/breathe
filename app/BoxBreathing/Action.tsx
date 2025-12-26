@@ -5,13 +5,27 @@ import { Button, Text, View } from "react-native";
 export default function Action() {
   const { boxSeconds, duration, durationType } = useLocalSearchParams();
   const [time, setTime] = useState(boxSeconds as unknown as number);
-  const [globalDuration, setGlobalDuration] = useState(100);
+  const [globalDuration, setGlobalDuration] = useState(16);
   const [breathState, setBreathState] = useState("in");
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
+
+  /*
+
+  duration = duration * 60 to seconds
+
+  if (durationType == "holds") {
+    setGlobalDuration((prev) => prev + 16);
+  }
+
+  duration = duration * 4 * boxSeconds 
+
+  Globalduration
+
+  */
 
   useEffect(() => {}, [time, globalDuration]);
 
@@ -79,11 +93,13 @@ export default function Action() {
   };
 
   const startBreathingExercise = async () => {
-    for (let i = 0; i < 2; i++) {
+    let localGlobalDuration = globalDuration;
+    while (localGlobalDuration > 0) {
       await inhale()
         .then(async () => await hold())
         .then(async () => await exhale())
         .then(async () => await hold());
+      localGlobalDuration -= 16;
     }
   };
 
