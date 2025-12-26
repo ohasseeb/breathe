@@ -4,25 +4,40 @@ import { Button, Text, View } from "react-native";
 // This View is when the exercise Begins
 export default function Action() {
   const { boxSeconds, duration, durationType } = useLocalSearchParams();
-  const [time, setTime] = useState(10);
+  const [time, setTime] = useState(boxSeconds as unknown as number);
+  const [globalDuration, setGlobalDuration] = useState(100);
   const timeRef = useRef(null) as any;
 
-  useEffect(() => {}, [time]);
+  useEffect(() => {}, [time, globalDuration]);
 
-  function startBreathingExercise() {
-    // Logic to start the breathing exercise
-    console.log("Breathing exercise started");
+  // work in progress
+  const startTimer = (seconds: number) => {
+    return new Promise<void>((resolve) => {
+      console.log("Starting timer for", seconds, "seconds");
+      setTime(seconds);
+      let localTime = seconds;
 
-    let localTime = time;
-    clearInterval(timeRef.current);
-    timeRef.current = setInterval(() => {
-      setTime((prevTime) => prevTime - 1);
-      localTime -= 1;
-      if (localTime <= 0) {
+      // clear existing interval if any
+      if (timeRef.current) {
         clearInterval(timeRef.current);
+        timeRef.current = null;
       }
-    }, 1000);
-  }
+
+      timeRef.current = setInterval(() => {
+        setTime((prev) => Math.max(prev - 1, 0));
+        localTime -= 1;
+        setGlobalDuration((prev) => Math.max(prev - 1, 0));
+
+        if (localTime <= 0) {
+          if (timeRef.current) {
+            clearInterval(timeRef.current);
+            timeRef.current = null;
+          }
+          resolve(); // only resolve when the timer finishes
+        }
+      }, 1000);
+    });
+  };
 
   function pauseBreathingExercise() {
     // Logic to Pause the breathing exercise
@@ -44,14 +59,17 @@ export default function Action() {
     // startBreathingExercise();
   }
 
-  // work in progress
-  function startTimer(seconds: number) {
-    setTime(seconds);
-    setInterval(() => {
-      seconds--;
-      globalDuration = globalDuration - 1;
-    }, 1000);
-  }
+  const startBreathingExercise = async () => {
+    let boxSecondsNum = Number(boxSeconds);
+
+    for (let i = 0; i < 2; i++) {
+      await startTimer(boxSecondsNum)
+        .then(async () => await startTimer(boxSecondsNum))
+        .then(async () => await startTimer(boxSecondsNum))
+        .then(async () => await startTimer(boxSecondsNum));
+    }
+  };
+
   return (
     <View>
       <Text>Action Component</Text>
@@ -60,6 +78,10 @@ export default function Action() {
       <Text>Duration Type: {durationType}</Text>
       <View className="mt-10 mb-10 items-center justify-center">
         <Text className="text-header-primary">Time Left: {time} seconds</Text>
+        <Text className="text-header-secondary">
+          {" "}
+          Global Duration {globalDuration} seconds
+        </Text>
       </View>
       <Button title="Start" onPress={() => startBreathingExercise()} />
       <Button title="Pause" onPress={() => pauseBreathingExercise()} />
