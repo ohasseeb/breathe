@@ -127,6 +127,10 @@ Final checks
 
 https://docs.expo.dev/router/basics/navigation/#understanding-native-navigation
 
+## Ref Notes:
+
+https://react.dev/learn/manipulating-the-dom-with-refs
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
