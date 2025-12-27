@@ -5,13 +5,19 @@ import { Button, Text, View } from "react-native";
 export default function Action() {
   const { boxSeconds, duration, durationType } = useLocalSearchParams();
   const [time, setTime] = useState(boxSeconds as unknown as number);
-  const [globalDuration, setGlobalDuration] = useState(16);
+  const [globalDuration, setGlobalDuration] = useState(
+    duration as unknown as number
+  );
   const [breathState, setBreathState] = useState("in");
+  const [holdsCounter, setHoldsCounter] = useState(0);
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
+
+  console.log("Duration in seconds:", duration);
+  console.log("Duration Type:", durationType);
 
   /*
 
@@ -94,12 +100,18 @@ export default function Action() {
 
   const startBreathingExercise = async () => {
     let localGlobalDuration = globalDuration;
+    if (durationType === "Holds") {
+      localGlobalDuration = duration as unknown as number;
+      //   setGlobalDuration(localGlobalDuration);
+    }
+
     while (localGlobalDuration > 0) {
       await inhale()
         .then(async () => await hold())
         .then(async () => await exhale())
         .then(async () => await hold());
-      localGlobalDuration -= 16;
+      setHoldsCounter((prev) => prev + 1);
+      localGlobalDuration -= 1;
     }
   };
 
@@ -114,9 +126,16 @@ export default function Action() {
           Breath State: {breathState}
         </Text>
         <Text className="text-header-primary">Time Left: {time} seconds</Text>
-        <Text className="text-header-secondary">
-          Global Duration {globalDuration} seconds
-        </Text>
+        {durationType === "Minutes" && (
+          <Text className="text-header-secondary">
+            Global Duration {globalDuration} {durationType}
+          </Text>
+        )}
+        {durationType === "Holds" && (
+          <Text className="text-header-secondary">
+            Holds Counter: {holdsCounter} / {duration as unknown as number}
+          </Text>
+        )}
       </View>
       <Button title="Start" onPress={() => startBreathingExercise()} />
       <Button title="Pause" onPress={() => pauseBreathingExercise()} />
