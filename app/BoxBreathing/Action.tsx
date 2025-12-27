@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Text, View } from "react-native";
 // This View is when the exercise Begins
 export default function Action() {
-  const { boxSeconds, duration, durationType } = useLocalSearchParams();
+  const {
+    boxSeconds,
+    duration = boxSeconds,
+    durationType,
+  } = useLocalSearchParams();
   const [time, setTime] = useState(boxSeconds as unknown as number);
   const [globalDuration, setGlobalDuration] = useState(
     duration as unknown as number
