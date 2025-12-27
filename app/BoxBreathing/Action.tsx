@@ -9,10 +9,13 @@ export default function Action() {
     durationType,
   } = useLocalSearchParams();
   const [time, setTime] = useState(boxSeconds as unknown as number);
-  const [globalDuration, setGlobalDuration] = useState(
-    duration as unknown as number
-  );
-  const [breathState, setBreathState] = useState("in");
+  const durationConversion =
+    durationType === "Minutes"
+      ? (duration as unknown as number) * 60 // Minutes
+      : (duration as unknown as number); // Else holds
+
+  const [globalDuration, setGlobalDuration] = useState(durationConversion);
+  const [breathState, setBreathState] = useState("");
   const [holdsCounter, setHoldsCounter] = useState(0);
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
@@ -109,14 +112,15 @@ export default function Action() {
       localGlobalDuration = duration as unknown as number;
       //   setGlobalDuration(localGlobalDuration);
     }
-
-    while (localGlobalDuration > 0) {
-      await inhale()
-        .then(async () => await hold())
-        .then(async () => await exhale())
-        .then(async () => await hold());
-      setHoldsCounter((prev) => prev + 1);
-      localGlobalDuration -= 1;
+    if (durationType === "Holds") {
+      while (localGlobalDuration > 0) {
+        await inhale()
+          .then(async () => await hold())
+          .then(async () => await exhale())
+          .then(async () => await hold());
+        setHoldsCounter((prev) => prev + 1);
+        localGlobalDuration -= 1;
+      }
     }
   };
 
@@ -146,6 +150,11 @@ export default function Action() {
       <Button title="Pause" onPress={() => pauseBreathingExercise()} />
       <Button title="Stop" onPress={() => stopBreathingExercise()} />
       <Button title="Restart" onPress={() => restartBreathingExercise()} />
+
+      <View className="items-center justify-center">
+        <View className="border border-8 border-indigo-500 w-40 h-40  mt-10" />
+        {/* <View className="border border-t-8 border-indigo-500 w-40 h-40  mt-10" /> */}
+      </View>
     </View>
   );
 }
