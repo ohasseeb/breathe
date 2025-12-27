@@ -80,6 +80,7 @@ export default function Action() {
     // Logic to restart the breathing exercise
     console.log("Breathing exercise restarted");
     setTime(duration as unknown as number);
+    setHoldsCounter(0);
     // startBreathingExercise();
   }
 

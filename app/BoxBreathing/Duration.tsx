@@ -66,18 +66,18 @@ export default function Duration() {
       {/* Text displaying the box breathing duration type */}
       <View className="flex flex-row items-center justify-center mt-10">
         <Text className="text-subheader-secondary"> Duration: </Text>
-        <Text className="text-subheader-secondary">
+        {/* <Text className="text-subheader-secondary">
           {!isCustom ? boxSeconds : ""}
-        </Text>
+        </Text> */}
 
-        {isCustom && (
-          <TextInput
-            className="border border-gray-300 rounded p-2 text-form-value w-20"
-            placeholder="Enter custom duration"
-            onChangeText={onChangeCustomDuration}
-            value={customDuration}
-          />
-        )}
+        {/* {isCustom && ( */}
+        <TextInput
+          className="border border-gray-300 rounded p-2 text-form-value w-20"
+          placeholder="Enter custom duration"
+          onChangeText={onChangeCustomDuration}
+          value={customDuration}
+        />
+        {/* )} */}
         <TouchableOpacity onPress={togglePicker}>
           <Text className="text-subheader-secondary ml-2">{durationType}</Text>
         </TouchableOpacity>
