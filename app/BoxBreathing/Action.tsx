@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, Text, View } from "react-native";
+import BackgroundView from "../components/BackgroundView";
 // This View is when the exercise Begins
 export default function Action() {
   const {
@@ -17,14 +18,17 @@ export default function Action() {
   const [globalDuration, setGlobalDuration] = useState(durationConversion);
   const [breathState, setBreathState] = useState("");
   const [holdsCounter, setHoldsCounter] = useState(0);
+  const [secondsCounter, setSecondsCounter] = useState(0);
+  const [minutesCounter, setMinutesCounter] = useState(0);
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
+  const secondsRef = useRef(0);
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
 
-  console.log("Duration in seconds:", duration);
-  console.log("Duration Type:", durationType);
+  //   console.log("Duration in seconds:", duration);
+  //   console.log("Duration Type:", durationType);
 
   /*
 
@@ -40,9 +44,10 @@ export default function Action() {
 
   */
 
-  useEffect(() => {}, [time, globalDuration]);
+  useEffect(() => {}, [time, globalDuration, secondsCounter, minutesCounter]);
 
   // work in progress
+  // LocalTime acts as the timer for each breath phase due to setTime (SetState is async)
   const startTimer = (seconds: number, breathState: string) => {
     return new Promise<void>((resolve) => {
       setTime(seconds);
@@ -54,10 +59,21 @@ export default function Action() {
         timeRef.current = null;
       }
 
-      timeRef.current = setInterval(() => {
+      timeRef.current = setInterval(async () => {
         setTime((prev) => Math.max(prev - 1, 0));
+        // await incrementSecondsCounter();
+        setSecondsCounter((prev) => prev + 1);
+
         localTime -= 1;
         setGlobalDuration((prev) => Math.max(prev - 1, 0));
+        secondsRef.current += 1;
+        console.log("SecondsRef.current = ", secondsRef.current);
+
+        console.log(secondsRef.current + "% 60 = " + (secondsRef.current % 60));
+
+        if (secondsRef.current % 60 === 0) {
+          setMinutesCounter((prev) => prev + 1);
+        }
 
         if (localTime <= 0) {
           if (timeRef.current) {
@@ -93,17 +109,17 @@ export default function Action() {
 
   const inhale = async () => {
     setBreathState(breathStateOptions[INHALE]);
-    await startTimer(Number(boxSeconds), breathStateOptions[0]);
+    await startTimer(Number(boxSeconds), breathStateOptions[INHALE]);
   };
 
   const exhale = async () => {
     setBreathState(breathStateOptions[EXHALE]);
-    await startTimer(Number(boxSeconds), breathStateOptions[2]);
+    await startTimer(Number(boxSeconds), breathStateOptions[EXHALE]);
   };
 
   const hold = async () => {
     setBreathState(breathStateOptions[HOLD]);
-    await startTimer(Number(boxSeconds), breathStateOptions[1]);
+    await startTimer(Number(boxSeconds), breathStateOptions[HOLD]);
   };
 
   const startBreathingExercise = async () => {
@@ -121,12 +137,21 @@ export default function Action() {
         setHoldsCounter((prev) => prev + 1);
         localGlobalDuration -= 1;
       }
+    } else {
+      // Minutes
+      while (localGlobalDuration > 0) {
+        await inhale()
+          .then(async () => await hold())
+          .then(async () => await exhale())
+          .then(async () => await hold());
+        setHoldsCounter((prev) => prev + 1);
+        localGlobalDuration -= 1;
+      }
     }
   };
 
   return (
-    <View>
-      <Text>Action Component</Text>
+    <BackgroundView>
       <Text>Box Seconds: {boxSeconds}</Text>
       <Text>Duration: {duration}</Text>
       <Text>Duration Type: {durationType}</Text>
@@ -136,9 +161,19 @@ export default function Action() {
         </Text>
         <Text className="text-header-primary">Time Left: {time} seconds</Text>
         {durationType === "Minutes" && (
-          <Text className="text-header-secondary">
-            Global Duration {globalDuration} {durationType}
-          </Text>
+          <View>
+            <Text className="text-header-secondary">
+              Global Duration {globalDuration} Seconds
+              {/* {durationType} */}
+            </Text>
+            <Text className="text-header-secondary">
+              Seconds Counter: {secondsCounter}
+            </Text>
+
+            <Text className="text-header-secondary">
+              Minutes Counter: {minutesCounter}
+            </Text>
+          </View>
         )}
         {durationType === "Holds" && (
           <Text className="text-header-secondary">
@@ -155,6 +190,6 @@ export default function Action() {
         <View className="border border-8 border-indigo-500 w-40 h-40  mt-10" />
         {/* <View className="border border-t-8 border-indigo-500 w-40 h-40  mt-10" /> */}
       </View>
-    </View>
+    </BackgroundView>
   );
 }
