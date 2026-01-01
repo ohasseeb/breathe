@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         primary: "#1E40AF",
         secondary: "#F59E0B",
+
         light: {
           100: "#F3F4F6",
           200: "#E5E7EB",
@@ -23,6 +24,15 @@ module.exports = {
           200: "#1F2937",
           300: "#111827",
         },
+        skyBlue: "#71a6d2", // rgb(113,166,210)
+        forestGreen: "#014421", // rgb(1,68,33)
+        limeGreen: "#a6d271", // rgb(166,210,113)
+        navy: "#210144", // rgb(33,1,68)
+        pink: "#d271a6", // rgb(210,113,166)
+        mellowYellow: "#F1D7AA", // rgb(241,215,170)
+        mellowGreen: "#C3DCE1", // rgb(195,220,225)
+        mellowRed: "#F8DACC",
+        default: "#E2E2E2", // rgb(226,226,226)
       },
       fontSize: {
         xxs: "0.625rem", // 10px

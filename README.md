@@ -131,6 +131,20 @@ https://docs.expo.dev/router/basics/navigation/#understanding-native-navigation
 
 https://react.dev/learn/manipulating-the-dom-with-refs
 
+## Color
+
+HEX. | RGB
+#71a6d2 | (113,166,210)
+#014421 | (1,68,33)
+#a6d271 | (166,210,113)
+#210144 | (33,1,68)
+#d271a6 | (210,113,166)
+
+mellowYellow: "#F1D7AA", // rgb(241,215,170)
+mellowGreen: "#C3DCE1", // rgb(195,220,225)
+mellowRed: "#F8DACC",
+default: "#E2E2E2", // rgb(226,226,226)
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:

@@ -2,6 +2,7 @@ import { Picker } from "@react-native-picker/picker";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import BackgroundView from "../components/BackgroundView";
 // Takes in Seconds as Props , if no prop then custom is selected
 
 export default function Duration() {
@@ -14,7 +15,7 @@ export default function Duration() {
   const isCustom = boxSeconds === "Custom";
 
   // STATES
-  const [durationType, setDurationType] = useState(durationOptions[HOLDS]);
+  const [durationType, setDurationType] = useState(durationOptions[MINUTES]);
   const [customSeconds, onChangeCustomSeconds] = useState("");
   const [customDuration, onChangeCustomDuration] = useState("");
   const [openPicker, setOpenPicker] = useState(false);
@@ -37,7 +38,7 @@ export default function Duration() {
 
   console.log("Box Seconds Params:", boxSeconds);
   return (
-    <View>
+    <BackgroundView>
       {/* Text displaying the box breathing duration */}
       <View className="items-center justify-center">
         <Text className="text-5xl "> Box Breathing</Text>
@@ -112,6 +113,6 @@ export default function Duration() {
           Start
         </Link>
       </View>
-    </View>
+    </BackgroundView>
   );
 }
