@@ -9,7 +9,7 @@ export default function Action() {
     duration = boxSeconds,
     durationType,
   } = useLocalSearchParams();
-  const [time, setTime] = useState(boxSeconds as unknown as number);
+  const [time, setTime] = useState(boxSeconds as unknown as number); // Is the  small timer that counts down each box seconds
   const durationConversion =
     durationType === "Minutes"
       ? (duration as unknown as number) * 60 // Minutes
@@ -27,22 +27,7 @@ export default function Action() {
   const HOLD = 1;
   const EXHALE = 2;
 
-  //   console.log("Duration in seconds:", duration);
-  //   console.log("Duration Type:", durationType);
-
-  /*
-
-  duration = duration * 60 to seconds
-
-  if (durationType == "holds") {
-    setGlobalDuration((prev) => prev + 16);
-  }
-
-  duration = duration * 4 * boxSeconds 
-
-  Globalduration
-
-  */
+  // Minutes Calcuation
 
   useEffect(() => {}, [time, globalDuration, secondsCounter, minutesCounter]);
 
@@ -61,16 +46,13 @@ export default function Action() {
 
       timeRef.current = setInterval(async () => {
         setTime((prev) => Math.max(prev - 1, 0));
-        // await incrementSecondsCounter();
         setSecondsCounter((prev) => prev + 1);
 
         localTime -= 1;
         setGlobalDuration((prev) => Math.max(prev - 1, 0));
         secondsRef.current += 1;
-        console.log("SecondsRef.current = ", secondsRef.current);
 
-        console.log(secondsRef.current + "% 60 = " + (secondsRef.current % 60));
-
+        // For Minutes based Duration tracking
         if (secondsRef.current % 60 === 0) {
           setMinutesCounter((prev) => prev + 1);
         }
@@ -139,7 +121,11 @@ export default function Action() {
       }
     } else {
       // Minutes
-      while (localGlobalDuration > 0) {
+      //   console.log("Starting Minutes based breathing exercise");
+      //   console.log("Duration, Minutes:", duration);
+      //   console.log("Duration Type: ", durationType);
+      //   console.log("Duration Conversion:", durationConversion);
+      while (secondsRef.current <= durationConversion) {
         await inhale()
           .then(async () => await hold())
           .then(async () => await exhale())
@@ -175,11 +161,11 @@ export default function Action() {
             </Text>
           </View>
         )}
-        {durationType === "Holds" && (
-          <Text className="text-header-secondary">
-            Holds Counter: {holdsCounter} / {duration as unknown as number}
-          </Text>
-        )}
+        {/* {durationType === "Holds" && ( */}
+        <Text className="text-header-secondary">
+          Holds Counter: {holdsCounter} / {duration as unknown as number}
+        </Text>
+        {/* )} */}
       </View>
       <Button title="Start" onPress={() => startBreathingExercise()} />
       <Button title="Pause" onPress={() => pauseBreathingExercise()} />
@@ -188,7 +174,6 @@ export default function Action() {
 
       <View className="items-center justify-center">
         <View className="border border-8 border-indigo-500 w-40 h-40  mt-10" />
-        {/* <View className="border border-t-8 border-indigo-500 w-40 h-40  mt-10" /> */}
       </View>
     </BackgroundView>
   );
