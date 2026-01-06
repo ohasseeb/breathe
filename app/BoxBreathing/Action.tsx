@@ -147,7 +147,6 @@ export default function Action() {
         <View>
           <Text className="text-header-secondary">
             Global Duration {globalDuration} Seconds
-            {/* {durationType} */}
           </Text>
           {durationType === "Minutes" && (
             <View>
@@ -161,11 +160,11 @@ export default function Action() {
             </View>
           )}
         </View>
-        {/* {durationType === "Holds" && ( */}
-        <Text className="text-header-secondary">
-          Holds Counter: {holdsCounter} / {duration as unknown as number}
-        </Text>
-        {/* )} */}
+        {durationType === "Holds" && (
+          <Text className="text-header-secondary">
+            Holds Counter: {holdsCounter} / {duration as unknown as number}
+          </Text>
+        )}
       </View>
       <Button title="Start" onPress={() => startBreathingExercise()} />
       <Button title="Pause" onPress={() => pauseBreathingExercise()} />
