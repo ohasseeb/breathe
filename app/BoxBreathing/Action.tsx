@@ -107,7 +107,6 @@ export default function Action() {
     let localGlobalDuration = globalDuration;
     if (durationType === "Holds") {
       localGlobalDuration = duration as unknown as number;
-      //   setGlobalDuration(localGlobalDuration);
     }
     if (durationType === "Holds") {
       while (localGlobalDuration > 0) {
