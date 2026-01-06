@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, Text, View } from "react-native";
+import BackgroundView from "../components/BackgroundView";
 // This View is when the exercise Begins
 export default function Action() {
   const {
@@ -8,42 +9,31 @@ export default function Action() {
     duration = boxSeconds,
     durationType,
   } = useLocalSearchParams();
-  const [time, setTime] = useState(boxSeconds as unknown as number);
+  const [time, setTime] = useState(boxSeconds as unknown as number); // Is the  small timer that counts down each box seconds
   const durationConversion =
     durationType === "Minutes"
       ? (duration as unknown as number) * 60 // Minutes
       : (duration as unknown as number); // Else holds
 
-  const [globalDuration, setGlobalDuration] = useState(durationConversion);
+  const [globalDuration, setGlobalDuration] = useState(durationConversion); // Global Counter for total seconds, one hold is 4 * box seconds
   const [breathState, setBreathState] = useState("");
   const [holdsCounter, setHoldsCounter] = useState(0);
+  const [secondsCounter, setSecondsCounter] = useState(0);
+  const [minutesCounter, setMinutesCounter] = useState(0);
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
+  const secondsRef = useRef(0);
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
 
-  console.log("Duration in seconds:", duration);
-  console.log("Duration Type:", durationType);
+  // Minutes Calcuation
 
-  /*
-
-  duration = duration * 60 to seconds
-
-  if (durationType == "holds") {
-    setGlobalDuration((prev) => prev + 16);
-  }
-
-  duration = duration * 4 * boxSeconds 
-
-  Globalduration
-
-  */
-
-  useEffect(() => {}, [time, globalDuration]);
+  useEffect(() => {}, [time, globalDuration, secondsCounter, minutesCounter]);
 
   // work in progress
-  const startTimer = (seconds: number, breathState: string) => {
+  // LocalTime acts as the timer for each breath phase due to setTime (SetState is async)
+  const startTimer = (seconds: number) => {
     return new Promise<void>((resolve) => {
       setTime(seconds);
       let localTime = seconds;
@@ -54,10 +44,18 @@ export default function Action() {
         timeRef.current = null;
       }
 
-      timeRef.current = setInterval(() => {
+      timeRef.current = setInterval(async () => {
         setTime((prev) => Math.max(prev - 1, 0));
+        setSecondsCounter((prev) => prev + 1);
+
         localTime -= 1;
         setGlobalDuration((prev) => Math.max(prev - 1, 0));
+        secondsRef.current += 1;
+
+        // For Minutes based Duration tracking
+        if (secondsRef.current % 60 === 0) {
+          setMinutesCounter((prev) => prev + 1);
+        }
 
         if (localTime <= 0) {
           if (timeRef.current) {
@@ -88,32 +86,44 @@ export default function Action() {
     console.log("Breathing exercise restarted");
     setTime(duration as unknown as number);
     setHoldsCounter(0);
-    // startBreathingExercise();
   }
 
   const inhale = async () => {
     setBreathState(breathStateOptions[INHALE]);
-    await startTimer(Number(boxSeconds), breathStateOptions[0]);
+    await startTimer(Number(boxSeconds));
   };
 
   const exhale = async () => {
     setBreathState(breathStateOptions[EXHALE]);
-    await startTimer(Number(boxSeconds), breathStateOptions[2]);
+    await startTimer(Number(boxSeconds));
   };
 
   const hold = async () => {
     setBreathState(breathStateOptions[HOLD]);
-    await startTimer(Number(boxSeconds), breathStateOptions[1]);
+    await startTimer(Number(boxSeconds));
   };
 
   const startBreathingExercise = async () => {
     let localGlobalDuration = globalDuration;
     if (durationType === "Holds") {
       localGlobalDuration = duration as unknown as number;
-      //   setGlobalDuration(localGlobalDuration);
     }
     if (durationType === "Holds") {
       while (localGlobalDuration > 0) {
+        await inhale()
+          .then(async () => await hold())
+          .then(async () => await exhale())
+          .then(async () => await hold());
+        setHoldsCounter((prev) => prev + 1);
+        localGlobalDuration -= 1;
+      }
+    } else {
+      // Minutes
+      //   console.log("Starting Minutes based breathing exercise");
+      //   console.log("Duration, Minutes:", duration);
+      //   console.log("Duration Type: ", durationType);
+      //   console.log("Duration Conversion:", durationConversion);
+      while (secondsRef.current <= durationConversion) {
         await inhale()
           .then(async () => await hold())
           .then(async () => await exhale())
@@ -125,8 +135,7 @@ export default function Action() {
   };
 
   return (
-    <View>
-      <Text>Action Component</Text>
+    <BackgroundView>
       <Text>Box Seconds: {boxSeconds}</Text>
       <Text>Duration: {duration}</Text>
       <Text>Duration Type: {durationType}</Text>
@@ -135,11 +144,22 @@ export default function Action() {
           Breath State: {breathState}
         </Text>
         <Text className="text-header-primary">Time Left: {time} seconds</Text>
-        {durationType === "Minutes" && (
+        <View>
           <Text className="text-header-secondary">
-            Global Duration {globalDuration} {durationType}
+            Global Duration {globalDuration} Seconds
           </Text>
-        )}
+          {durationType === "Minutes" && (
+            <View>
+              <Text className="text-header-secondary">
+                Seconds Counter: {secondsCounter}
+              </Text>
+
+              <Text className="text-header-secondary">
+                Minutes Counter: {minutesCounter}
+              </Text>
+            </View>
+          )}
+        </View>
         {durationType === "Holds" && (
           <Text className="text-header-secondary">
             Holds Counter: {holdsCounter} / {duration as unknown as number}
@@ -153,8 +173,7 @@ export default function Action() {
 
       <View className="items-center justify-center">
         <View className="border border-8 border-indigo-500 w-40 h-40  mt-10" />
-        {/* <View className="border border-t-8 border-indigo-500 w-40 h-40  mt-10" /> */}
       </View>
-    </View>
+    </BackgroundView>
   );
 }
