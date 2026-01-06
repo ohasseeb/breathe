@@ -38,12 +38,12 @@ export default function Duration() {
 
   console.log("Box Seconds Params:", boxSeconds);
   return (
-    <BackgroundView>
+    <BackgroundView className="h-full">
       {/* Text displaying the box breathing duration */}
       <View className="items-center justify-center">
-        <Text className="text-5xl "> Box Breathing</Text>
+        <Text className="text-5xl color-light-200"> Box Breathing</Text>
 
-        <Text className=" text-5xl">
+        <Text className=" text-3xl color-light-300">
           {boxSeconds ? boxSeconds : "Custom"} Second Holds
         </Text>
       </View>

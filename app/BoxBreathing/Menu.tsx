@@ -18,7 +18,7 @@ export default function BoxBreathingMenu() {
 
   return (
     <BackgroundView className="flex-1 items-center justify-center p-6">
-      <Text className="text-4xl font-bold text-blue-500">Box Breathing</Text>
+      <Text className="text-4xl font-bold text-light-200">Box Breathing</Text>
       <ScrollView className="w-full mt-10">
         <StyledButton
           onPress={() => router.push(navigateToDurationSelect(4))}
