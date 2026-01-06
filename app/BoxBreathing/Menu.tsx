@@ -1,4 +1,4 @@
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { ScrollView, Text } from "react-native";
 import "../../global.css";
 import BackgroundView from "../components/BackgroundView";
@@ -19,7 +19,6 @@ export default function BoxBreathingMenu() {
   return (
     <BackgroundView className="flex-1 items-center justify-center p-6">
       <Text className="text-4xl font-bold text-blue-500">Box Breathing</Text>
-      {/* // Turn this into a Scroll View */}
       <ScrollView className="w-full mt-10">
         <StyledButton
           onPress={() => router.push(navigateToDurationSelect(4))}
@@ -46,15 +45,5 @@ export default function BoxBreathingMenu() {
         </StyledButton>
       </ScrollView>
     </BackgroundView>
-  );
-}
-
-function NavigationLink({ href, children }: { href: any; children: string }) {
-  return (
-    <Text className="text-2xl m-4 ">
-      <Link className="w-full h-full" href={href}>
-        {children}
-      </Link>
-    </Text>
   );
 }

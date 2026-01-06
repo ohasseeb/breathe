@@ -21,7 +21,6 @@ const colorMap: Record<string, string> = {
   accent4: "bg-accent4",
   accent5: "bg-accent5",
   default: "bg-default",
-  // add more as needed
 };
 
 const StyledButton = ({
@@ -38,8 +37,6 @@ const StyledButton = ({
       text-black text-[18px] leading-7 font-sans px-[22px] py-[14px] mt-4`}
     >
       {children}
-
-      {/* {link && <Link href={link} />} */}
     </TouchableOpacity>
   );
 };
