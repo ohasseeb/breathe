@@ -15,7 +15,7 @@ export default function Action() {
       ? (duration as unknown as number) * 60 // Minutes
       : (duration as unknown as number); // Else holds
 
-  const [globalDuration, setGlobalDuration] = useState(durationConversion);
+  const [globalDuration, setGlobalDuration] = useState(durationConversion); // Global Counter for total seconds, one hold is 4 * box seconds
   const [breathState, setBreathState] = useState("");
   const [holdsCounter, setHoldsCounter] = useState(0);
   const [secondsCounter, setSecondsCounter] = useState(0);
@@ -33,7 +33,7 @@ export default function Action() {
 
   // work in progress
   // LocalTime acts as the timer for each breath phase due to setTime (SetState is async)
-  const startTimer = (seconds: number, breathState: string) => {
+  const startTimer = (seconds: number) => {
     return new Promise<void>((resolve) => {
       setTime(seconds);
       let localTime = seconds;
@@ -86,22 +86,21 @@ export default function Action() {
     console.log("Breathing exercise restarted");
     setTime(duration as unknown as number);
     setHoldsCounter(0);
-    // startBreathingExercise();
   }
 
   const inhale = async () => {
     setBreathState(breathStateOptions[INHALE]);
-    await startTimer(Number(boxSeconds), breathStateOptions[INHALE]);
+    await startTimer(Number(boxSeconds));
   };
 
   const exhale = async () => {
     setBreathState(breathStateOptions[EXHALE]);
-    await startTimer(Number(boxSeconds), breathStateOptions[EXHALE]);
+    await startTimer(Number(boxSeconds));
   };
 
   const hold = async () => {
     setBreathState(breathStateOptions[HOLD]);
-    await startTimer(Number(boxSeconds), breathStateOptions[HOLD]);
+    await startTimer(Number(boxSeconds));
   };
 
   const startBreathingExercise = async () => {
@@ -146,21 +145,23 @@ export default function Action() {
           Breath State: {breathState}
         </Text>
         <Text className="text-header-primary">Time Left: {time} seconds</Text>
-        {durationType === "Minutes" && (
-          <View>
-            <Text className="text-header-secondary">
-              Global Duration {globalDuration} Seconds
-              {/* {durationType} */}
-            </Text>
-            <Text className="text-header-secondary">
-              Seconds Counter: {secondsCounter}
-            </Text>
+        <View>
+          <Text className="text-header-secondary">
+            Global Duration {globalDuration} Seconds
+            {/* {durationType} */}
+          </Text>
+          {durationType === "Minutes" && (
+            <View>
+              <Text className="text-header-secondary">
+                Seconds Counter: {secondsCounter}
+              </Text>
 
-            <Text className="text-header-secondary">
-              Minutes Counter: {minutesCounter}
-            </Text>
-          </View>
-        )}
+              <Text className="text-header-secondary">
+                Minutes Counter: {minutesCounter}
+              </Text>
+            </View>
+          )}
+        </View>
         {/* {durationType === "Holds" && ( */}
         <Text className="text-header-secondary">
           Holds Counter: {holdsCounter} / {duration as unknown as number}
