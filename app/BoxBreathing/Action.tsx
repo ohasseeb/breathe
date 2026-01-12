@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, Text, View } from "react-native";
+import ActionBox from "../components/ActionBox";
 import BackgroundView from "../components/BackgroundView";
 // This View is when the exercise Begins
 export default function Action() {
@@ -26,6 +27,7 @@ export default function Action() {
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
+  const DEBUG = true;
 
   // Minutes Calcuation
 
@@ -166,14 +168,13 @@ export default function Action() {
           </Text>
         )}
       </View>
-      <Button title="Start" onPress={() => startBreathingExercise()} />
-      <Button title="Pause" onPress={() => pauseBreathingExercise()} />
-      <Button title="Stop" onPress={() => stopBreathingExercise()} />
-      <Button title="Restart" onPress={() => restartBreathingExercise()} />
-
-      <View className="items-center justify-center">
-        <View className="border border-8 border-indigo-500 w-40 h-40  mt-10" />
-      </View>
+      {/* <ActionBox /> */}
+      <ActionBox size={200} thickness={3} color="#000">
+        <Button title="Start" onPress={() => startBreathingExercise()} />
+        <Button title="Pause" onPress={() => pauseBreathingExercise()} />
+        <Button title="Stop" onPress={() => stopBreathingExercise()} />
+        <Button title="Restart" onPress={() => restartBreathingExercise()} />
+      </ActionBox>
     </BackgroundView>
   );
 }
