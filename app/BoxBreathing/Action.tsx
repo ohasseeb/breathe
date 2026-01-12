@@ -21,6 +21,11 @@ export default function Action() {
   const [holdsCounter, setHoldsCounter] = useState(0);
   const [secondsCounter, setSecondsCounter] = useState(0);
   const [minutesCounter, setMinutesCounter] = useState(0);
+  const [topToggle, setTopToggle] = useState(false);
+  const [botToggle, setBotToggle] = useState(false);
+  const [leftToggle, setLeftToggle] = useState(false);
+  const [rightToggle, setRightToggle] = useState(false);
+
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
   const secondsRef = useRef(0);
@@ -28,10 +33,21 @@ export default function Action() {
   const HOLD = 1;
   const EXHALE = 2;
   const DEBUG = true;
+  const FIRST = 1;
+  const SECOND = 2;
 
   // Minutes Calcuation
 
-  useEffect(() => {}, [time, globalDuration, secondsCounter, minutesCounter]);
+  useEffect(() => {}, [
+    time,
+    globalDuration,
+    secondsCounter,
+    minutesCounter,
+    topToggle,
+    leftToggle,
+    rightToggle,
+    botToggle,
+  ]);
 
   // work in progress
   // LocalTime acts as the timer for each breath phase due to setTime (SetState is async)
@@ -83,6 +99,13 @@ export default function Action() {
     setTime(0);
   }
 
+  function togglesOff() {
+    setLeftToggle(false);
+    setBotToggle(false);
+    setRightToggle(false);
+    setTopToggle(false);
+  }
+
   function restartBreathingExercise() {
     // Logic to restart the breathing exercise
     console.log("Breathing exercise restarted");
@@ -92,16 +115,30 @@ export default function Action() {
 
   const inhale = async () => {
     setBreathState(breathStateOptions[INHALE]);
+    setBotToggle(false);
+    setLeftToggle(true);
     await startTimer(Number(boxSeconds));
   };
 
   const exhale = async () => {
     setBreathState(breathStateOptions[EXHALE]);
+    setTopToggle(false);
+    setRightToggle(true);
     await startTimer(Number(boxSeconds));
   };
 
-  const hold = async () => {
+  const hold = async (whichHold: number) => {
     setBreathState(breathStateOptions[HOLD]);
+    if (whichHold === FIRST) {
+      setLeftToggle(false);
+      setTopToggle(true);
+    }
+
+    if (whichHold === SECOND) {
+      setRightToggle(false);
+      setBotToggle(true);
+    }
+
     await startTimer(Number(boxSeconds));
   };
 
@@ -113,12 +150,13 @@ export default function Action() {
     if (durationType === "Holds") {
       while (localGlobalDuration > 0) {
         await inhale()
-          .then(async () => await hold())
+          .then(async () => await hold(FIRST))
           .then(async () => await exhale())
-          .then(async () => await hold());
+          .then(async () => await hold(SECOND));
         setHoldsCounter((prev) => prev + 1);
         localGlobalDuration -= 1;
       }
+      togglesOff();
     } else {
       // Minutes
       //   console.log("Starting Minutes based breathing exercise");
@@ -127,12 +165,13 @@ export default function Action() {
       //   console.log("Duration Conversion:", durationConversion);
       while (secondsRef.current <= durationConversion) {
         await inhale()
-          .then(async () => await hold())
+          .then(async () => await hold(FIRST))
           .then(async () => await exhale())
-          .then(async () => await hold());
+          .then(async () => await hold(SECOND));
         setHoldsCounter((prev) => prev + 1);
         localGlobalDuration -= 1;
       }
+      togglesOff();
     }
   };
 
@@ -169,7 +208,15 @@ export default function Action() {
         )}
       </View>
       {/* <ActionBox /> */}
-      <ActionBox size={200} thickness={3} color="#000">
+      <ActionBox
+        size={200}
+        thickness={3}
+        leftToggle={leftToggle}
+        topToggle={topToggle}
+        rightToggle={rightToggle}
+        botToggle={botToggle}
+        color="#000"
+      >
         <Button title="Start" onPress={() => startBreathingExercise()} />
         <Button title="Pause" onPress={() => pauseBreathingExercise()} />
         <Button title="Stop" onPress={() => stopBreathingExercise()} />
