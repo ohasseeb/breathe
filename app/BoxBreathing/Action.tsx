@@ -32,11 +32,15 @@ export default function Action() {
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
-  const DEBUG = true;
+  const DEBUG = false;
   const FIRST = 1;
   const SECOND = 2;
 
   // Minutes Calcuation
+
+  useEffect(() => {
+    startBreathingExercise();
+  }, []);
 
   useEffect(() => {}, [
     time,
@@ -158,11 +162,6 @@ export default function Action() {
       }
       togglesOff();
     } else {
-      // Minutes
-      //   console.log("Starting Minutes based breathing exercise");
-      //   console.log("Duration, Minutes:", duration);
-      //   console.log("Duration Type: ", durationType);
-      //   console.log("Duration Conversion:", durationConversion);
       while (secondsRef.current <= durationConversion) {
         await inhale()
           .then(async () => await hold(FIRST))
@@ -177,51 +176,55 @@ export default function Action() {
 
   return (
     <BackgroundView>
-      <Text>Box Seconds: {boxSeconds}</Text>
-      <Text>Duration: {duration}</Text>
-      <Text>Duration Type: {durationType}</Text>
-      <View className="mt-10 mb-10 items-center justify-center">
-        <Text className="text-header-secondary">
-          Breath State: {breathState}
-        </Text>
-        <Text className="text-header-primary">Time Left: {time} seconds</Text>
+      {DEBUG && (
         <View>
-          <Text className="text-header-secondary">
-            Global Duration {globalDuration} Seconds
-          </Text>
-          {durationType === "Minutes" && (
-            <View>
-              <Text className="text-header-secondary">
-                Seconds Counter: {secondsCounter}
-              </Text>
-
-              <Text className="text-header-secondary">
-                Minutes Counter: {minutesCounter}
-              </Text>
-            </View>
-          )}
+          <Text>Box Seconds: {boxSeconds}</Text>
+          <Text>Duration: {duration}</Text>
+          <Text>Duration Type: {durationType}</Text>
         </View>
+      )}
+      <View className="mt-10 mb-10 items-center justify-center">
+        <ActionBox
+          size={350}
+          thickness={3}
+          leftToggle={leftToggle}
+          topToggle={topToggle}
+          rightToggle={rightToggle}
+          botToggle={botToggle}
+          color="#000"
+        >
+          <Text className="text-header-secondary">{breathState}</Text>
+          <Text className="text-header-primary">{time} seconds</Text>
+          <View>
+            {DEBUG && (
+              <Text className="text-header-secondary">
+                Global Duration {globalDuration} Seconds
+              </Text>
+            )}
+            {durationType === "Minutes" && (
+              <View>
+                <Text className="text-header-secondary">
+                  Seconds Counter: {secondsCounter}
+                </Text>
+
+                <Text className="text-header-secondary">
+                  Minutes Counter: {minutesCounter}
+                </Text>
+              </View>
+            )}
+          </View>
+        </ActionBox>
         {durationType === "Holds" && (
           <Text className="text-header-secondary">
             Holds Counter: {holdsCounter} / {duration as unknown as number}
           </Text>
         )}
       </View>
-      {/* <ActionBox /> */}
-      <ActionBox
-        size={200}
-        thickness={3}
-        leftToggle={leftToggle}
-        topToggle={topToggle}
-        rightToggle={rightToggle}
-        botToggle={botToggle}
-        color="#000"
-      >
-        <Button title="Start" onPress={() => startBreathingExercise()} />
-        <Button title="Pause" onPress={() => pauseBreathingExercise()} />
-        <Button title="Stop" onPress={() => stopBreathingExercise()} />
-        <Button title="Restart" onPress={() => restartBreathingExercise()} />
-      </ActionBox>
+
+      <Button title="Start" onPress={() => startBreathingExercise()} />
+      <Button title="Pause" onPress={() => pauseBreathingExercise()} />
+      <Button title="Stop" onPress={() => stopBreathingExercise()} />
+      <Button title="Restart" onPress={() => restartBreathingExercise()} />
     </BackgroundView>
   );
 }
