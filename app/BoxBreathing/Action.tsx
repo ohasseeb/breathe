@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Text, View } from "react-native";
 import ActionBox from "../components/ActionBox";
 import BackgroundView from "../components/BackgroundView";
+import CountDownTimer from "../components/CountDownTimer";
 // This View is when the exercise Begins
 export default function Action() {
   const {
@@ -38,8 +39,9 @@ export default function Action() {
 
   // Minutes Calcuation
 
+  // Starts breathing Exercise automatically
   useEffect(() => {
-    startBreathingExercise();
+    // startBreathingExercise();
   }, []);
 
   useEffect(() => {}, [
@@ -176,6 +178,7 @@ export default function Action() {
 
   return (
     <BackgroundView>
+      <CountDownTimer />
       {DEBUG && (
         <View>
           <Text>Box Seconds: {boxSeconds}</Text>

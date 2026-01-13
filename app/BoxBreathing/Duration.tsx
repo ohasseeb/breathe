@@ -23,6 +23,7 @@ export default function Duration() {
   const [customDuration, onChangeCustomDuration] = useState("");
   const [openPicker, setOpenPicker] = useState(false);
   const togglePicker = () => setOpenPicker((prev) => !prev);
+  const PLACEHOLDER = durationType === "Holds" ? 10 : 5;
 
   useEffect(() => {}, [openPicker]);
 
@@ -73,7 +74,7 @@ export default function Duration() {
         <Text className="text-header-secondary"> Duration: </Text>
         <TextInput
           className="border border-gray-300 rounded p-2 text-header-secondary w-19"
-          placeholder="10" //Enter custom duration
+          placeholder={durationType === "holds" ? "10" : "5"} //Enter custom duration
           onChangeText={onChangeCustomDuration}
           value={customDuration}
         />
@@ -113,7 +114,7 @@ export default function Duration() {
             router.push(
               navigateToAction(
                 Number(boxSeconds) ? Number(boxSeconds) : Number(customSeconds),
-                customDuration ? Number(customDuration) : Number(boxSeconds),
+                customDuration ? Number(customDuration) : PLACEHOLDER,
                 durationType
               )
             )
