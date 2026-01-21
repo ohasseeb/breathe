@@ -30,7 +30,7 @@ export default function Duration() {
   function navigateToAction(
     boxSeconds: number,
     duration: number,
-    durationType: string
+    durationType: string,
   ) {
     const actionNavigationObj = {
       pathname: "./Action",
@@ -74,7 +74,7 @@ export default function Duration() {
         <Text className="text-header-secondary"> Duration: </Text>
         <TextInput
           className="border border-gray-300 rounded p-2 text-header-secondary w-19"
-          placeholder={durationType === "holds" ? "10" : "5"} //Enter custom duration
+          placeholder={durationType === "Holds" ? "10" : "5"} //Enter custom duration
           onChangeText={onChangeCustomDuration}
           value={customDuration}
         />
@@ -115,8 +115,8 @@ export default function Duration() {
               navigateToAction(
                 Number(boxSeconds) ? Number(boxSeconds) : Number(customSeconds),
                 customDuration ? Number(customDuration) : PLACEHOLDER,
-                durationType
-              )
+                durationType,
+              ),
             )
           }
           buttonColor="mellowGreen"

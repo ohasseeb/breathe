@@ -26,7 +26,7 @@ export default function Action() {
   const [botToggle, setBotToggle] = useState(false);
   const [leftToggle, setLeftToggle] = useState(false);
   const [rightToggle, setRightToggle] = useState(false);
-
+  const [countdownCallBack, setCountdownCallback] = useState(false);
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
   const timeRef = useRef(null) as any;
   const secondsRef = useRef(0);
@@ -41,8 +41,10 @@ export default function Action() {
 
   // Starts breathing Exercise automatically
   useEffect(() => {
-    // startBreathingExercise();
-  }, []);
+    if (countdownCallBack) {
+      startBreathingExercise();
+    }
+  }, [countdownCallBack]);
 
   useEffect(() => {}, [
     time,
@@ -178,7 +180,7 @@ export default function Action() {
 
   return (
     <BackgroundView>
-      <CountDownTimer />
+      <CountDownTimer onCountdownComplete={() => setCountdownCallback(true)} />
       {DEBUG && (
         <View>
           <Text>Box Seconds: {boxSeconds}</Text>
