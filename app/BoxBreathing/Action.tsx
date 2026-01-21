@@ -1,11 +1,10 @@
+import { useAudioPlayer } from "expo-audio"; // This component runs the box-breathing exercise.
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, Text, View } from "react-native";
 import ActionBox from "../components/ActionBox";
 import BackgroundView from "../components/BackgroundView";
 import CountDownTimer from "../components/CountDownTimer";
-
-// This component runs the box-breathing exercise.
 // It reads params from the route (boxSeconds, duration, durationType)
 // and coordinates the inhale/hold/exhale/hold sequence using startTimer,
 // which returns a Promise that resolves when the phase finishes.
@@ -54,6 +53,10 @@ export default function Action() {
   const DEBUG = false;
   const FIRST = 1;
   const SECOND = 2;
+
+  // const Audio Source
+  const audioSource = require("../../assets/audio/SonarEdited.wav");
+  const player = useAudioPlayer(audioSource);
 
   // Start the breathing exercise automatically once the countdown completes.
   // countdownCallBack is set to true by <CountDownTimer onCountdownComplete={...} />
@@ -111,6 +114,10 @@ export default function Action() {
         if (secondsRef.current % 60 === 0) {
           setMinutesCounter((prev) => prev + 1);
         }
+        // Play Audio (When Clicking Back Button then Forward, Gets an Error)
+        // Add Conditional Logic incase it's an Option
+        player.seekTo(0);
+        player.play();
 
         // When the local phase finishes, clear interval and resolve the Promise
         if (localTime <= 0) {
