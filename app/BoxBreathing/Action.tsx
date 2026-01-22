@@ -55,9 +55,10 @@ export default function Action() {
   const SECOND = 2;
 
   // const Audio Source
-  const audioSource = require("../../assets/audio/SonarEdited.wav");
-  const player = useAudioPlayer(audioSource);
-
+  const sonarSource = require("../../assets/audio/Sonar.wav");
+  const drumSource = require("../../assets/audio/DrumEdited.wav");
+  const secondPlayer = useAudioPlayer(sonarSource);
+  const stateChangePlayer = useAudioPlayer(drumSource);
   // Start the breathing exercise automatically once the countdown completes.
   // countdownCallBack is set to true by <CountDownTimer onCountdownComplete={...} />
   useEffect(() => {
@@ -116,8 +117,14 @@ export default function Action() {
         }
         // Play Audio (When Clicking Back Button then Forward, Gets an Error)
         // Add Conditional Logic incase it's an Option
-        player.seekTo(0);
-        player.play();
+        // When the sound is equal to box seconds have a differents ound
+        if (secondsRef.current % (boxSeconds as unknown as number) === 0) {
+          stateChangePlayer.seekTo(0);
+          stateChangePlayer.play();
+        } else {
+          secondPlayer.seekTo(0);
+          secondPlayer.play();
+        }
 
         // When the local phase finishes, clear interval and resolve the Promise
         if (localTime <= 0) {
