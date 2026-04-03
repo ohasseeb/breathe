@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
-import { ScrollView, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import "../../global.css";
 import BackgroundView from "../components/BackgroundView";
 import StyledButton from "../components/StyledButton";
+import Settings from "./Settings";
 //This page is the Menu for Box Breathing, choosing the duration of inhales/exhales/holds
 
 export default function BoxBreathingMenu() {
@@ -18,7 +19,12 @@ export default function BoxBreathingMenu() {
 
   return (
     <BackgroundView className="flex-1 items-center justify-center p-6">
-      <Text className="text-4xl font-bold text-light-200">Box Breathing</Text>
+      <View className="w-full flex-row items-center justify-center">
+        <Text className="text-4xl font-bold text-light-200 mr-5">
+          Box Breathing
+        </Text>
+        <Settings />
+      </View>
       <ScrollView className="w-full mt-10">
         <StyledButton
           onPress={() => router.push(navigateToDurationSelect(4))}
