@@ -45,8 +45,16 @@ export default function Action() {
 
   // breath phases and refs/constants
   const breathStateOptions = ["Inhale", "Hold", "Exhale", "Hold"];
-  const timeRef = useRef(null) as any; // holds the current interval id for phase timers
+  const timeRef = useRef<NodeJS.Timeout | number | null>(null); // holds the current interval id for phase timers
   const secondsRef = useRef(0); // persistent seconds counter across phases
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   const INHALE = 0;
   const HOLD = 1;
   const EXHALE = 2;
@@ -65,7 +73,16 @@ export default function Action() {
     if (countdownCallBack) {
       startBreathingExercise();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdownCallBack]);
+
+  // Cleanup on unmount (e.g., navigation Back button or hardware back)
+  useEffect(() => {
+    return () => {
+      stopAllExerciseActivity();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // a placeholder effect that can be used for debugging or derived updates
   useEffect(() => {}, [
@@ -96,6 +113,14 @@ export default function Action() {
 
       // create a new interval that ticks every second
       timeRef.current = setInterval(async () => {
+        if (!isMounted.current) {
+          if (timeRef.current) {
+            clearInterval(timeRef.current);
+            timeRef.current = null;
+          }
+          return;
+        }
+
         // decrement phase timer (clamped at 0)
         setTime((prev) => Math.max(prev - 1, 0));
 
@@ -117,13 +142,13 @@ export default function Action() {
         }
         // Play Audio (When Clicking Back Button then Forward, Gets an Error)
         // Add Conditional Logic incase it's an Option
-        // When the sound is equal to box seconds have a differents ound
+        // When the sound is equal to box seconds have a differents sound
         if (secondsRef.current % (boxSeconds as unknown as number) === 0) {
-          stateChangePlayer.seekTo(0);
-          stateChangePlayer.play();
+          stateChangePlayer?.seekTo?.(0);
+          stateChangePlayer?.play?.();
         } else {
-          secondPlayer.seekTo(0);
-          secondPlayer.play();
+          secondPlayer?.seekTo?.(0);
+          secondPlayer?.play?.();
         }
 
         // When the local phase finishes, clear interval and resolve the Promise
@@ -138,17 +163,40 @@ export default function Action() {
     });
   };
 
+  // Unified cleanup for timing and audio; can be called from any stop/exit path.
+  function stopAllExerciseActivity() {
+    console.log("Breathing exercise cleanup");
+
+    if (timeRef.current) {
+      clearInterval(timeRef.current);
+      timeRef.current = null;
+    }
+
+    setTime(0);
+
+    try {
+      secondPlayer?.pause?.();
+      secondPlayer?.stop?.();
+      stateChangePlayer?.pause?.();
+      stateChangePlayer?.stop?.();
+    } catch (error) {
+      console.warn("Audio cleanup failed", error);
+    }
+  }
+
   // Pause: clears the current interval (simple pause)
   function pauseBreathingExercise() {
     console.log("Breathing exercise paused");
-    clearInterval(timeRef.current);
+    if (timeRef.current) {
+      clearInterval(timeRef.current);
+      timeRef.current = null;
+    }
   }
 
   // Stop: clears interval and reset the small-phase timer to 0
   function stopBreathingExercise() {
     console.log("Breathing exercise stopped");
-    clearInterval(timeRef.current);
-    setTime(0);
+    stopAllExerciseActivity();
   }
 
   // helper to turn all toggles off
