@@ -9,7 +9,7 @@ export default function BackgroundView({
   children: React.ReactNode;
   styleToggle?: boolean; // if true, no default styles applied
 }) {
-  let styles = `bg-skyBlue p-6 ${className}`;
+  let styles = `w-full h-full bg-skyBlue p-6 ${className}`;
 
   return <View className={styleToggle ? `` : styles}>{children}</View>;
 }

@@ -19,7 +19,7 @@ export default function Index() {
   return (
     <BackgroundView className="flex-1 items-center justify-center">
       <Text className="text-4xl font-bold text-light-200 mb-6">
-        Welcome to Breathe !
+        Welcome to Breathe
       </Text>
 
       <StyledButton

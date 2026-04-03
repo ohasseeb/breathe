@@ -151,3 +151,14 @@ To learn more about developing your project with Expo, look at the following res
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+
+## AUdio Library
+
+https://docs.expo.dev/versions/latest/sdk/audio/
+
+https://snack.expo.dev/?platform=web (Example I used)
+
+Sonar Beep Sound taken from Here:
+https://freesound.org/people/SamsterBirdies/sounds/539957/
+
+<!-- Audio -->
