@@ -32,6 +32,13 @@ function SettingsModal({
   visible: boolean;
   onClose: () => void;
 }) {
+  const [audioPerSecondEnabled, setAudioPerSecondEnabled] = useState(false);
+  const [audioPerActionChangeEnabled, setAudioPerActionChangeEnabled] =
+    useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [maleVoice, setMaleVoice] = useState(false);
+  const [femaleVoice, setFemaleVoice] = useState(false);
+
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
       <View className="flex-1 bg-black/50">
@@ -53,21 +60,28 @@ function SettingsModal({
             {/* Add your settings options here */}
             <View className="flex mb-4 flex-row items-center justify-between">
               <Text className="text-base mb-2">Audio Per Second</Text>
-              <Switch />
+              <Switch
+                value={audioPerSecondEnabled}
+                onValueChange={setAudioPerSecondEnabled}
+              />
             </View>
             <View className="flex mb-4 flex-row items-center justify-between">
               <Text className="text-base mb-2">Audio Per Action Change</Text>
-              <Switch />
+              <Switch
+                value={audioPerActionChangeEnabled}
+                onValueChange={setAudioPerActionChangeEnabled}
+              />
             </View>
             <View className="flex mb-4 flex-row items-center justify-between">
               <Text className="text-base mb-2">Voice Enabled </Text>
-              <Switch />
+              <Switch value={voiceEnabled} onValueChange={setVoiceEnabled} />
             </View>
 
             <View className="flex mb-4 flex-row items-center justify-between">
               <Text className="text-base mb-2">Male Voice </Text>
-              <Switch />
+              <Switch value={maleVoice} onValueChange={setMaleVoice} />
               <Text className="text-base mb-2">Female Voice </Text>
+              <Switch value={femaleVoice} onValueChange={setFemaleVoice} />
             </View>
           </ScrollView>
         </View>
