@@ -2,8 +2,8 @@ import { useRouter } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import "../../global.css";
 import BackgroundView from "../components/BackgroundView";
+import Settings from "../components/Settings";
 import StyledButton from "../components/StyledButton";
-import Settings from "./Settings";
 //This page is the Menu for Box Breathing, choosing the duration of inhales/exhales/holds
 
 export default function BoxBreathingMenu() {
