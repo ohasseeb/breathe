@@ -5,6 +5,7 @@ import { Button, Text, View } from "react-native";
 import ActionBox from "../components/ActionBox";
 import BackgroundView from "../components/BackgroundView";
 import CountDownTimer from "../components/CountDownTimer";
+import { useSettings } from "../hooks/useSettings";
 // It reads params from the route (boxSeconds, duration, durationType)
 // and coordinates the inhale/hold/exhale/hold sequence using startTimer,
 // which returns a Promise that resolves when the phase finishes.
@@ -16,6 +17,9 @@ export default function Action() {
     durationType,
   } = useLocalSearchParams();
 
+  const settings = useSettings();
+
+  console.log("Settings From Local Storage in Action:", settings);
   // small-phase timer (counts down each phase/box)
   const [time, setTime] = useState(boxSeconds as unknown as number);
 
@@ -176,9 +180,9 @@ export default function Action() {
 
     try {
       secondPlayer?.pause?.();
-      secondPlayer?.stop?.();
+      // secondPlayer?.stop?.();
       stateChangePlayer?.pause?.();
-      stateChangePlayer?.stop?.();
+      // stateChangePlayer?.stop?.();
     } catch (error) {
       console.warn("Audio cleanup failed", error);
     }

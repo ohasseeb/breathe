@@ -1,5 +1,5 @@
 import Feather from "@expo/vector-icons/Feather";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Modal,
@@ -35,7 +35,13 @@ function SettingsModal({
   onClose: () => void;
 }) {
   const { settings, updateSetting, isLoading } = useSettings();
+  const [loadedAt, setLoadedAt] = useState<string>("");
 
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadedAt(new Date().toLocaleTimeString());
+    }
+  }, [isLoading]);
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
       <View className="flex-1 bg-black/50">
@@ -44,6 +50,10 @@ function SettingsModal({
 
         {/* Bottom sheet - takes up 50% of screen */}
         <View className="h-1/2 bg-white rounded-t-3xl p-6">
+          <Text className="text-xs text-gray-500 mb-2">
+            Loaded at: {loadedAt}
+          </Text>
+
           <TouchableOpacity
             onPress={onClose}
             className="mb-4 flex-row justify-end"
